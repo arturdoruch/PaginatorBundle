@@ -15,8 +15,6 @@
         "twig/extensions": "~1.0"
     },
     "autoload": {
-        "psr-4" : {
-            "ArturDoruch\\PaginatorBundle\\" : ""
-        }
-    },
+        "psr-4" : { "ArturDoruch\\PaginatorBundle\\" : "" }
+    }
 }
