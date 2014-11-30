@@ -1,0 +1,11 @@
+<ul class="pagination">
+    {% for pager in pagination %}
+        {% if pager['url'] is defined %}
+            <li><a href="{{ pager['url'] }}">{{ pager['label']|raw }}</a></li>
+        {% elseif pager['active'] is defined %}
+            <li class="active"><span>{{ pager['label'] }}</span></li>
+        {% elseif pager['skip'] is defined %}
+            <li><span>...</span></li>
+        {% endif %}
+    {% endfor %}
+</ul>
