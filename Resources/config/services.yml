@@ -1,0 +1,9 @@
+services:
+    arturdoruch_paginator:
+        class: ArturDoruch\PaginatorBundle\Paginator\Paginator
+
+    arturdoruch_paginator.twig_extension.pagination:
+        class: ArturDoruch\PaginatorBundle\Twig\Extension\PaginationExtension
+        arguments: [@router]
+        tags:
+            - { name: twig.extension }
