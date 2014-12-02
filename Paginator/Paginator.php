@@ -75,12 +75,10 @@ class Paginator
         return $paginator;
     }
 
-
     private function getOffset($page, $limit)
     {
         $offset = ($page - 1) * $limit;
 
         return $offset > 0 ? $offset : 0;
     }
-
 }
