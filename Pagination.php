@@ -34,7 +34,7 @@ class Pagination
         $this->offset = (int) $offset;
 
         if ($this->limit < 1) {
-            $this->limit = 999999;
+            $this->limit = 99999999999999999;
         }
         if ($this->page < 1) {
             $this->page = 1;

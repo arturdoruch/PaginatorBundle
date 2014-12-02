@@ -15,9 +15,21 @@ use ArturDoruch\PaginatorBundle\Pagination;
 class Paginator
 {
     /**
+     * @var int Default query limit
+     */
+    private $limit;
+
+    public function __construct($limit)
+    {
+        $this->limit = (int) $limit;
+    }
+
+    /**
      * @param Query|QueryBuilder $query A Doctrine ORM query or query builder.
      * @param int $page
-     * @param int $limit
+     * @param number|null $limit If -1 then will be fetch all items without limit.
+     *                           If $limit is empty (null or "") then will be used default limit value.
+     *                           Finally when $limit is positive value then will be used.
      * @param bool $fetchJoinCollection Whether the query joins a collection (true by default).
      *
      * @return ExtendedDoctrinePaginator
@@ -30,18 +42,25 @@ class Paginator
             );
         }
 
-        $offset = $this->getOffset($page, $limit);
-
-        if ($limit < 1) {
-            $limit = 999999;
-        }
-        if ($offset < 0) {
+        if ($limit == -1) {
+            // Without limit
+            $page = 1;
             $offset = 0;
-        }
+        } else {
+            $page = (int) $page;
+            $limit = (int) $limit;
 
-        $query
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
+            if (empty($limit)) {
+                $limit = $this->limit;
+            }
+
+            $offset = $this->getOffset($page, $limit);
+
+            $query->setFirstResult($offset);
+            if ($limit >= 0) {
+                $query->setMaxResults($limit);
+            }
+        }
 
         $paginator = new ExtendedDoctrinePaginator($query, $fetchJoinCollection);
         $totalItems = $paginator->count();
@@ -56,8 +75,12 @@ class Paginator
         return $paginator;
     }
 
+
     private function getOffset($page, $limit)
     {
-        return ($page - 1) * $limit;
+        $offset = ($page - 1) * $limit;
+
+        return $offset > 0 ? $offset : 0;
     }
+
 }
