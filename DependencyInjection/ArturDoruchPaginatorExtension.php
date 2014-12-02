@@ -24,5 +24,9 @@ class ArturDoruchPaginatorExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        //$container->setParameter('artur_doruch_paginator.limit', $config['limit']);
+        $paginator = $container->getDefinition('arturdoruch_paginator');
+        $paginator->addArgument($config['limit']);
     }
 }

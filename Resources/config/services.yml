@@ -1,3 +1,4 @@
+
 services:
     arturdoruch_paginator:
         class: ArturDoruch\PaginatorBundle\Paginator\Paginator

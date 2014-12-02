@@ -1,6 +1,7 @@
 {
     "name": "arturdoruch/paginator-bundle",
     "description": "Simple paginator for Symfony2",
+    "type": "symfony-bundle",
     "keywords": ["paginator", "pagination", "symfony2", "bundle"],
     "authors": [
         {
