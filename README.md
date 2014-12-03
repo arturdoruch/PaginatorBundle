@@ -5,11 +5,11 @@ Simple paginator for Symfony2. This paginator uses Doctrine ORM query builder.
 
 # Installation
 
-1. Add the following line to your composer.json require block
+Add the following line to your composer.json require block
 ```sh
 "arturdoruch/paginator-bundle": "dev-master"
 ```
-and add this code into requrements key. If "requirements" key doesn't exists create them.
+and this into repositories key. If "repositories" key doesn't exists create them.
 ```sh
 "repositories": [
   {
@@ -17,6 +17,24 @@ and add this code into requrements key. If "requirements" key doesn't exists cre
     "url": "https://github.com/arturdoruch/PaginatorBundle"
   }
 ],
+```
+
+Execute command in composer
+```sh
+php composer.phar update arturdoruch/paginator-bundle
+```
+
+Add PaginatorBundle to your application kernel
+```php
+// app/AppKernel.php
+public function registerBundles()
+{
+    return array(
+        // ...
+        new ArturDoruch\PaginatorBundle\ArturDoruchPaginatorBundle(),
+        // ...
+    );
+}
 ```
 
 # Usage
