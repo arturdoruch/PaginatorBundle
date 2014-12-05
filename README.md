@@ -74,6 +74,7 @@ Paginate items list.
 $paginator->paginate($query, $page, $limit);
 ```
 
+<a name="#paginate-parameter"></a>
 Paginate method receive three parameters:
 * $query - Doctrine ORM query or Doctrine ORM query builder or array
 * $page - (integer) page to display
