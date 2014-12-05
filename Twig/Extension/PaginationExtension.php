@@ -155,7 +155,7 @@ class PaginationExtension extends \Twig_Extension
 
         $from = $pagination->getOffset() + 1;
         $to = $pagination->getPage() * $pagination->getLimit();
-        if ($to >= $pagination->totalItems()) {
+        if ($to >= $pagination->totalItems() || $to <= 0) {
             $to = $pagination->totalItems();
         }
 

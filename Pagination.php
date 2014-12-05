@@ -34,7 +34,7 @@ class Pagination
         $this->offset = (int) $offset;
 
         if ($this->limit < 1) {
-            $this->limit = 99999999999999999;
+            $this->limit = -1;
         }
         if ($this->page < 1) {
             $this->page = 1;
@@ -42,6 +42,8 @@ class Pagination
     }
 
     /**
+     * Gets total items count
+     *
      * @return int Total items count
      */
     public function totalItems()
@@ -50,10 +52,16 @@ class Pagination
     }
 
     /**
+     * Gets total pages
+     *
      * @return int
      */
     public function totalPages()
     {
+        if ($this->limit < 1) {
+            return 1;
+        }
+
         return (int) ceil($this->totalItems / $this->limit);
     }
 

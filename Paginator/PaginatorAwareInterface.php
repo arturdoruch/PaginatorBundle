@@ -8,7 +8,7 @@ namespace ArturDoruch\PaginatorBundle\Paginator;
 use ArturDoruch\PaginatorBundle\Pagination;
 
 
-interface PaginatorInterface
+interface PaginatorAwareInterface
 {
     /**
      * Sets pagination

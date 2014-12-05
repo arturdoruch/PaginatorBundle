@@ -3,18 +3,13 @@
  * @author Artur Doruch <arturdoruch@interia.pl>
  */
 
-namespace ArturDoruch\PaginatorBundle\Paginator;
+namespace ArturDoruch\PaginatorBundle\Paginator\Source;
 
-use ArturDoruch\PaginatorBundle\Pagination;
+use ArturDoruch\PaginatorBundle\Paginator\PaginatorAware;
 
 
-class ArrayPaginator implements \Countable, \IteratorAggregate, PaginatorInterface
+class ArrayPaginator extends PaginatorAware implements \Countable, \IteratorAggregate
 {
-    /**
-     * @var Pagination
-     */
-    private $pagination;
-
     /**
      * @var array Items
      */
@@ -41,26 +36,14 @@ class ArrayPaginator implements \Countable, \IteratorAggregate, PaginatorInterfa
     }
 
     /**
-     * @param Pagination $pagination
-     */
-    public function setPagination(Pagination $pagination)
-    {
-        $this->pagination = $pagination;
-    }
-
-    /**
-     * @return Pagination
-     */
-    public function getPagination()
-    {
-        return $this->pagination;
-    }
-
-    /**
      * @return \ArrayIterator
      */
     public function getIterator()
     {
+        if ($this->limit < 0) {
+            $this->limit = $this->count();
+        }
+
         $items = array_splice($this->array, $this->offset, $this->limit);
 
         return new \ArrayIterator($items);
