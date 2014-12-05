@@ -3,7 +3,7 @@ PaginatorBundle
 
 Simple paginator for Symfony2. Working with paginator Doctrine ORM Query and array.
 
-# Installation
+## Installation
 
 Add the following line to your composer.json require block
 ```json
@@ -41,7 +41,7 @@ public function registerBundles()
 }
 ```
 
-# Configuration
+## Configuration
 
 ArturDoruchPaginatorBundle currently provides only one optional parameter "limit".
 This is default limit value for paginator, used when paginate parameter $limit will be set null (see Controller section).
@@ -54,9 +54,9 @@ artur_doruch_paginator:
     limit: 20
 ```
 
-# Usage
+## Usage
 
-##Controller
+### Controller
 
 Paginator can paginate:
 
@@ -74,6 +74,7 @@ Paginate items list.
 $paginator->paginate($query, $page, $limit);
 ```
 
+<a name="#paginate-parameter"></a>
 Paginate method receive three parameters:
 * $query - Doctrine ORM query or Doctrine ORM query builder or array
 * $page - (integer) page to display
@@ -82,7 +83,7 @@ Paginate method receive three parameters:
     * null - default limit value will be used
     * integer positive - this value will be used to limited list items
 
-### Example
+#### Example
 
 Paginate items with Doctrine ORM query builder.
 ```php
@@ -143,7 +144,7 @@ public function listAction($page, Request $request)
 }
 ```
 
-##View
+### View
 
 In twig template you can use several functions to display all paginate list data.
 Each of them require Pagination class instance as parameter. See example below.
