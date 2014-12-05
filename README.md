@@ -1,17 +1,22 @@
 PaginatorBundle
 ===============
 
-Simple paginator for Symfony2. This paginator uses Doctrine ORM query builder.
+Simple paginator for Symfony2. Working with paginator Doctrine ORM Query and array.
 
 # Installation
 
+### composer
 Add the following line to your composer.json require block
-```sh
-"arturdoruch/paginator-bundle": "dev-master"
+```json
+"require": {
+    ...
+    "arturdoruch/paginator-bundle": "dev-master"
+}
 ```
-and this into repositories key. If "repositories" key doesn't exists create them.
-```sh
+and this into repositories block. If "repositories" key doesn't exists create them.
+```json
 "repositories": [
+  ...
   {
     "type": "vcs",
     "url": "https://github.com/arturdoruch/PaginatorBundle"
@@ -19,11 +24,12 @@ and this into repositories key. If "repositories" key doesn't exists create them
 ],
 ```
 
-Execute command in composer
+Download bundle. Run this command in terminal.
 ```sh
 php composer.phar update arturdoruch/paginator-bundle
 ```
 
+### AppKernel
 Add PaginatorBundle to your application kernel
 ```php
 // app/AppKernel.php
@@ -37,15 +43,49 @@ public function registerBundles()
 }
 ```
 
+### Configuration
+
+ArturDoruchPaginatorBundle currently provides only one optional parameter "limit".
+This is default limit value for paginator, used when paginate parameter $limit will be set null (see explanation below). If you skip this configuration, default limit will be set 10.
+
+```yml
+// app/config/config.yml
+
+artur_doruch_paginator:
+    limit: 20
+```
+
 # Usage
 
 ##Controller
 
-Currently paginator can paginate:
+Paginator can paginate:
 
+* Array
 * Doctrine\ORM\Query
 * Doctrine\ORM\QueryBuilder
 
+Get paginator in controller method
+```php
+$paginator = $this->get('arturdoruch_paginator');
+```
+
+Paginate items list.
+```php
+$paginator->paginate($query, $page, $limit);
+```
+
+Paginate method receive three parameters:
+* $query - Doctrine ORM query or Doctrine ORM query builder or array
+* $page - (integer) page to display
+* $limit - (int|null) items to show. Possible values:
+    * -1 - fetch all items (limit will be omitted)
+    * null - default limit value will be used
+    * integer positive - this value will be used to limited list items
+
+### Example
+
+Paginate items with Doctrine ORM query builder.
 ```php
 // Acme\ProjectBundle\Controller\ProjectController.php
 
@@ -54,9 +94,49 @@ public function listAction($page, Request $request)
     $repository = $this->getDoctrine()->getRepository('AcmeProjectBundle:Project');
     $qb = $repository->createQueryBuilder('p')
             ->select('p');
-            
+
     $paginator = $this->get('arturdoruch_paginator');
     $projects = $paginator->paginate($qb, $page, 5 /*limit per page*/);
+
+    return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
+        'projects' => $projects
+    ));
+}
+```
+
+Paginate items from array. Array can contain array or object collection.
+
+```php
+// Acme\ProjectBundle\Controller\ProjectController.php
+
+public function listAction($page, Request $request)
+{
+    $projectsList = array(
+            array(
+                'id' => 1,
+                'name' => 'PHP'
+            ),
+            array(
+                'id' => 2,
+                'name' => 'JS'
+            ),
+            array(
+                'id' => 3,
+                'name' => 'Symfony'
+            ),
+            array(
+                'id' => 4,
+                'name' => 'Github'
+            ),
+            array(
+                'id' => 5,
+                'name' => 'SCSS'
+            )
+            ...
+        );
+
+    $paginator = $this->get('arturdoruch_paginator');
+    $projects = $paginator->paginate($projectsList, $page, 5);
 
     return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
         'projects' => $projects
