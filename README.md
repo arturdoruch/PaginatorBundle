@@ -5,7 +5,6 @@ Simple paginator for Symfony2. Working with paginator Doctrine ORM Query and arr
 
 # Installation
 
-### composer
 Add the following line to your composer.json require block
 ```json
 "require": {
@@ -24,13 +23,12 @@ and this into repositories block. If "repositories" key doesn't exists create th
 ],
 ```
 
-Download bundle. Run this command in terminal.
+Install bundle by running this command in terminal.
 ```sh
 php composer.phar update arturdoruch/paginator-bundle
 ```
 
-### AppKernel
-Add PaginatorBundle to your application kernel
+Add ArturDoruchPaginatorBundle to your application kernel
 ```php
 // app/AppKernel.php
 public function registerBundles()
@@ -43,10 +41,11 @@ public function registerBundles()
 }
 ```
 
-### Configuration
+# Configuration
 
 ArturDoruchPaginatorBundle currently provides only one optional parameter "limit".
-This is default limit value for paginator, used when paginate parameter $limit will be set null (see explanation below). If you skip this configuration, default limit will be set 10.
+This is default limit value for paginator, used when paginate parameter $limit will be set null (see Controller section).
+If you skip this configuration, default limit will be set 10.
 
 ```yml
 // app/config/config.yml
@@ -65,7 +64,7 @@ Paginator can paginate:
 * Doctrine\ORM\Query
 * Doctrine\ORM\QueryBuilder
 
-Get paginator in controller method
+Get paginator in controller method.
 ```php
 $paginator = $this->get('arturdoruch_paginator');
 ```
@@ -96,7 +95,7 @@ public function listAction($page, Request $request)
             ->select('p');
 
     $paginator = $this->get('arturdoruch_paginator');
-    $projects = $paginator->paginate($qb, $page, 5 /*limit per page*/);
+    $projects = $paginator->paginate($qb, $page, 5);
 
     return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
         'projects' => $projects
