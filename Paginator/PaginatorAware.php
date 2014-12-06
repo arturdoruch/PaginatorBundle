@@ -8,7 +8,7 @@ namespace ArturDoruch\PaginatorBundle\Paginator;
 use ArturDoruch\PaginatorBundle\Pagination;
 
 
-abstract class PaginatorAware implements PaginatorAwareInterface
+abstract class PaginatorAware implements PaginatorAwareInterface, \Countable, \IteratorAggregate
 {
     /**
      * @var Pagination

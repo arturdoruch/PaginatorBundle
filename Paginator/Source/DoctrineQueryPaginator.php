@@ -54,5 +54,22 @@ class DoctrineQueryPaginator extends PaginatorAware
         return $this->doctrinePaginator->getFetchJoinCollection();
     }
 
+    public function getUseOutputWalkers()
+    {
+        return $this->doctrinePaginator->getUseOutputWalkers();
+    }
+
+    /**
+     * Sets whether the paginator will use an output walker.
+     *
+     * @param bool|null $useOutputWalkers
+     *
+     * @return $this
+     */
+    public function setUseOutputWalkers($useOutputWalkers)
+    {
+        return $this->doctrinePaginator->setUseOutputWalkers($useOutputWalkers);
+    }
+
 }
  

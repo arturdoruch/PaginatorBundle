@@ -8,7 +8,7 @@ namespace ArturDoruch\PaginatorBundle\Paginator\Source;
 use ArturDoruch\PaginatorBundle\Paginator\PaginatorAware;
 
 
-class ArrayPaginator extends PaginatorAware implements \Countable, \IteratorAggregate
+class ArrayPaginator extends PaginatorAware
 {
     /**
      * @var array Items
