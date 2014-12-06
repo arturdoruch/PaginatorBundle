@@ -12,16 +12,6 @@ Add the following line to your composer.json require block
     "arturdoruch/paginator-bundle": "dev-master"
 }
 ```
-and this into repositories block. If "repositories" key doesn't exists create them.
-```json
-"repositories": [
-  ...
-  {
-    "type": "vcs",
-    "url": "https://github.com/arturdoruch/PaginatorBundle"
-  }
-],
-```
 
 Install bundle by running this command in terminal.
 ```sh
