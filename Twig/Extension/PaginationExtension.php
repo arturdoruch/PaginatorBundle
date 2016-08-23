@@ -1,16 +1,15 @@
 <?php
-/**
- * @author Artur Doruch <arturdoruch@interia.pl>
- */
 
 namespace ArturDoruch\PaginatorBundle\Twig\Extension;
 
 use ArturDoruch\PaginatorBundle\Pagination;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig_Extension_InitRuntimeInterface;
 
-
-class PaginationExtension extends \Twig_Extension
+/**
+ * @author Artur Doruch <arturdoruch@interia.pl>
+ */
+class PaginationExtension extends \Twig_Extension implements Twig_Extension_InitRuntimeInterface
 {
     /**
      * @var Router
@@ -22,9 +21,15 @@ class PaginationExtension extends \Twig_Extension
      */
     private $environment;
 
-    public function __construct(Router $router)
+    /**
+     * @var array Pagination config
+     */
+    private $config;
+
+    public function __construct(Router $router, array $config)
     {
         $this->router = $router;
+        $this->config = $config;
     }
 
     /**
@@ -49,10 +54,10 @@ class PaginationExtension extends \Twig_Extension
         );
 
         return array(
-            new \Twig_SimpleFunction('arturdoruch_pagination', array($this, 'printPagination'), $options),
-            new \Twig_SimpleFunction('arturdoruch_pagination_total_items', array($this, 'printTotalItems'), $options),
-            new \Twig_SimpleFunction('arturdoruch_pagination_displayed_items', array($this, 'printDisplayedItems'), $options),
-            new \Twig_SimpleFunction('arturdoruch_pagination_all', array($this, 'printAll'), $options),
+            new \Twig_SimpleFunction('arturdoruch_pagination', array($this, 'renderPagination'), $options),
+            new \Twig_SimpleFunction('arturdoruch_pagination_total_items', array($this, 'renderTotalItems'), $options),
+            new \Twig_SimpleFunction('arturdoruch_pagination_displayed_items', array($this, 'renderDisplayedItems'), $options),
+            new \Twig_SimpleFunction('arturdoruch_pagination_all', array($this, 'renderAll'), $options),
         );
     }
 
@@ -62,7 +67,7 @@ class PaginationExtension extends \Twig_Extension
      * @param Pagination $pagination
      * @return string
      */
-    public function printTotalItems(Pagination $pagination)
+    public function renderTotalItems(Pagination $pagination)
     {
         return $this->environment->render('ArturDoruchPaginatorBundle:Pagination:totalItems.html.twig', array(
                 'totalItems' => $pagination->totalItems()
@@ -70,12 +75,12 @@ class PaginationExtension extends \Twig_Extension
     }
 
     /**
-     * Renders pagination list items
+     * Renders pagination list items.
      *
      * @param Pagination $pagination
      * @return string
      */
-    public function printPagination(Pagination $pagination)
+    public function renderPagination(Pagination $pagination)
     {
         $data = array();
 
@@ -88,7 +93,7 @@ class PaginationExtension extends \Twig_Extension
 
         // Prev page
         if ($pagination->hasPreviousPage()) {
-            $data[] = $this->getHyperlinkData('&#8592; Prev', $pagination->previousPage());
+            $data[] = $this->getHyperlinkData($this->config['prev_page_label'], $pagination->previousPage());
         }
 
         for ($i = 1; $i <= $totalPages; $i++) {
@@ -133,7 +138,7 @@ class PaginationExtension extends \Twig_Extension
         }
         // Next page
         if ($pagination->hasNextPage()) {
-            $data[] = $this->getHyperlinkData('Next &#8594;', $pagination->nextPage());
+            $data[] = $this->getHyperlinkData($this->config['next_page_label'], $pagination->nextPage());
         }
 
         return $this->environment->render('ArturDoruchPaginatorBundle:Pagination:pagination.html.twig', array(
@@ -142,12 +147,12 @@ class PaginationExtension extends \Twig_Extension
     }
 
     /**
-     * Renders range displayed items (from - to).
+     * Renders range of displayed items (from - to).
      *
      * @param Pagination $pagination
      * @return null|string
      */
-    public function printDisplayedItems(Pagination $pagination)
+    public function renderDisplayedItems(Pagination $pagination)
     {
         if ($pagination->totalItems() == 0) {
             return null;
@@ -170,13 +175,13 @@ class PaginationExtension extends \Twig_Extension
     }
 
     /**
-     * Prints all elements association with pagination:
-     * Total items count, range displayed items and pagination.
+     * Renders all elements associated with pagination:
+     * number of total items, range of displayed items and pagination.
      *
      * @param Pagination $pagination
      * @return string
      */
-    public function printAll(Pagination $pagination)
+    public function renderAll(Pagination $pagination)
     {
         return $this->environment->render('ArturDoruchPaginatorBundle:Pagination:all.html.twig', array(
                 'pagination' => $pagination
@@ -235,6 +240,5 @@ class PaginationExtension extends \Twig_Extension
             'queryString' => $context->getQueryString()
         );
     }
-
 }
  

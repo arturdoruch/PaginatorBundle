@@ -1,14 +1,13 @@
 <?php
-/**
- * @author Artur Doruch <arturdoruch@interia.pl>
- */
 
 namespace ArturDoruch\PaginatorBundle\Paginator;
 
 use ArturDoruch\PaginatorBundle\Pagination;
 
-
-interface PaginatorAwareInterface
+/**
+ * @author Artur Doruch <arturdoruch@interia.pl>
+ */
+interface PaginatorInterface extends \Countable, \IteratorAggregate
 {
     /**
      * Sets pagination

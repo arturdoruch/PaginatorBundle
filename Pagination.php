@@ -1,11 +1,10 @@
 <?php
-/**
- * @author Artur Doruch <arturdoruch@interia.pl>
- */
 
 namespace ArturDoruch\PaginatorBundle;
 
-
+/**
+ * @author Artur Doruch <arturdoruch@interia.pl>
+ */
 class Pagination
 {
     /**
@@ -25,16 +24,15 @@ class Pagination
      */
     private $offset;
 
-
     public function __construct($totalItems, $page = 1, $limit = 10, $offset = 0)
     {
-        $this->totalItems = (int) $totalItems;
-        $this->limit = (int) $limit;
-        $this->page = (int) $page;
-        $this->offset = (int) $offset;
+        $this->totalItems = (int)$totalItems;
+        $this->limit = (int)$limit;
+        $this->page = (int)$page;
+        $this->offset = (int)$offset;
 
         if ($this->limit < 1) {
-            $this->limit = -1;
+            $this->limit = 0;
         }
         if ($this->page < 1) {
             $this->page = 1;
@@ -42,9 +40,9 @@ class Pagination
     }
 
     /**
-     * Gets total items count
+     * Gets number of total items
      *
-     * @return int Total items count
+     * @return int
      */
     public function totalItems()
     {
@@ -52,7 +50,7 @@ class Pagination
     }
 
     /**
-     * Gets total pages
+     * Gets number of total pages
      *
      * @return int
      */
@@ -62,7 +60,7 @@ class Pagination
             return 1;
         }
 
-        return (int) ceil($this->totalItems / $this->limit);
+        return (int)ceil($this->totalItems / $this->limit);
     }
 
     public function getPage()
@@ -70,11 +68,17 @@ class Pagination
         return $this->page;
     }
 
+    /**
+     * @return int The positive integer or 0 if no limit.
+     */
     public function getLimit()
     {
         return $this->limit;
     }
 
+    /**
+     * @return int
+     */
     public function getOffset()
     {
         return $this->offset;
@@ -111,6 +115,5 @@ class Pagination
     {
         return $this->nextPage() <= $this->totalPages();
     }
-
 }
  

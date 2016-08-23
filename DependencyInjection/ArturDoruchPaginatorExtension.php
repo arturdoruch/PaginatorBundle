@@ -7,11 +7,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-/**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class ArturDoruchPaginatorExtension extends Extension
 {
     /**
@@ -25,8 +20,7 @@ class ArturDoruchPaginatorExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        //$container->setParameter('artur_doruch_paginator.limit', $config['limit']);
-        $paginator = $container->getDefinition('arturdoruch_paginator');
-        $paginator->addArgument($config['limit']);
+        $container->setParameter('arturdoruch_paginator.limit', $config['limit']);
+        $container->setParameter('arturdoruch_paginator.config', $config);
     }
 }

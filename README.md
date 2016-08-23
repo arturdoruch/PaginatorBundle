@@ -1,7 +1,14 @@
 PaginatorBundle
 ===============
 
-Simple paginator for Symfony2. Working with paginator Doctrine ORM Query and array.
+Simple paginator for Symfony2, which can paginate:
+* array
+* Doctrine\ORM\Query
+* Doctrine\ORM\QueryBuilder
+* Doctrine\ODM\MongoDB\Query\Builder
+* Doctrine\ODM\MongoDB\Query\Query
+* Doctrine\MongoDB\CursorInterface
+* MongoCursor
 
 ## Installation
 
@@ -9,16 +16,21 @@ Add the following line to your composer.json require block
 ```json
 "require": {
     ...
-    "arturdoruch/paginator-bundle": "dev-master"
+    "arturdoruch/paginator-bundle": "~1.0"
 }
 ```
 
-Install bundle by running this command in terminal.
+and run composer command
 ```sh
-php composer.phar update arturdoruch/paginator-bundle
+composer update arturdoruch/paginator-bundle
 ```
 
-Add ArturDoruchPaginatorBundle to your application kernel
+or simply
+```sh
+composer require arturdoruch/paginator-bundle
+```
+
+Register ArturDoruchPaginatorBundle in your application kernel class
 ```php
 // app/AppKernel.php
 public function registerBundles()
@@ -26,33 +38,24 @@ public function registerBundles()
     return array(
         // ...
         new ArturDoruch\PaginatorBundle\ArturDoruchPaginatorBundle(),
-        // ...
     );
 }
 ```
 
 ## Configuration
 
-ArturDoruchPaginatorBundle currently provides only one optional parameter "limit".
-This is default limit value for paginator, used when paginate parameter $limit will be set null (see Controller section).
-If you skip this configuration, default limit will be set 10.
-
 ```yml
 // app/config/config.yml
 
 artur_doruch_paginator:
-    limit: 20
+    limit: 10                        # Default value of displayed items per page
+    prev_page_label: '&#8592; Prev'  # Pagination previous page button label
+    next_page_label: 'Next &#8594;'  # Pagination next page button label
 ```
 
 ## Usage
 
 ### Controller
-
-Paginator can paginate:
-
-* Array
-* Doctrine\ORM\Query
-* Doctrine\ORM\QueryBuilder
 
 Get paginator in controller method.
 ```php
@@ -65,33 +68,53 @@ $paginator->paginate($query, $page, $limit);
 ```
 
 <a name="#paginate-parameter"></a>
-Paginate method receive three parameters:
-* $query - Doctrine ORM query or Doctrine ORM query builder or array
-* $page - (integer) page to display
-* $limit - (int|null) items to show. Possible values:
+ArturDoruch\PaginatorBundle\Paginator::paginate() method receive three parameters:
+* $query (mixed) A Doctrine ORM query or query builder, Doctrine mongodb ODM query or query builder,
+instance of Doctrine\MongoDB\CursorInterface, instance of MongoCursor, or array with arrays of items.
+* $page (integer) Number of page to display
+* $limit (integer) The number of items per page. Possible values are:
     * -1 - fetch all items (limit will be omitted)
-    * null - default limit value will be used
-    * integer positive - this value will be used to limited list items
+    * 0 - default limit (setting in config "artur_doruch_paginator.limit") will be used
+    * integer positive - given $limit value will be used
 
-#### Example
+#### Examples
 
-Paginate items with Doctrine ORM query builder.
+Paginate items with Doctrine ORM query and query builder.
 ```php
 // Acme\ProjectBundle\Controller\ProjectController.php
 
 public function listAction($page, Request $request)
 {
     $repository = $this->getDoctrine()->getRepository('AcmeProjectBundle:Project');
-    $qb = $repository->createQueryBuilder('p')
-            ->select('p');
-
     $paginator = $this->get('arturdoruch_paginator');
+    
+    // Doctrine\ORM\QueryBuilder
+    $qb = $repository->createQueryBuilder('p')
+        ->select('p');
+    
     $projects = $paginator->paginate($qb, $page, 5);
+
+    // Doctrine\ORM\Query
+    $query = $repository->createQueryBuilder('p')
+        ->select('p')
+        ->getQuery();
+
+    $projects = $paginator->paginate($query, $page, 5);    
 
     return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
         'projects' => $projects
     ));
 }
+```
+
+Paginate items with Doctrine ODM MongoDB query and query builder.
+```php
+// todo
+```
+
+Paginate items with Doctrine\MongoDB\CursorInterface and MongoCursor.
+```php
+// todo
 ```
 
 Paginate items from array. Array can contain array or object collection.

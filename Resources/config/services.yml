@@ -1,10 +1,10 @@
-
 services:
     arturdoruch_paginator:
-        class: ArturDoruch\PaginatorBundle\Paginator\Paginator
+        class: ArturDoruch\PaginatorBundle\Paginator
+        arguments: ["%arturdoruch_paginator.limit%"]
 
     arturdoruch_paginator.twig_extension.pagination:
         class: ArturDoruch\PaginatorBundle\Twig\Extension\PaginationExtension
-        arguments: [@router]
+        arguments: ["@router", "%arturdoruch_paginator.config%"]
         tags:
             - { name: twig.extension }

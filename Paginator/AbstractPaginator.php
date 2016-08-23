@@ -1,19 +1,18 @@
 <?php
-/**
- * @author Artur Doruch <arturdoruch@interia.pl>
- */
 
 namespace ArturDoruch\PaginatorBundle\Paginator;
 
 use ArturDoruch\PaginatorBundle\Pagination;
 
-
-abstract class PaginatorAware implements PaginatorAwareInterface, \Countable, \IteratorAggregate
+/**
+ * @author Artur Doruch <arturdoruch@interia.pl>
+ */
+abstract class AbstractPaginator implements PaginatorInterface
 {
     /**
      * @var Pagination
      */
-    protected $pagination;
+    private $pagination;
 
     /**
      * @param Pagination $pagination
@@ -29,6 +28,22 @@ abstract class PaginatorAware implements PaginatorAwareInterface, \Countable, \I
     public function getPagination()
     {
         return $this->pagination;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getLimit()
+    {
+        return $this->pagination->getLimit();
+    }
+
+    /**
+     * @return int
+     */
+    protected function getOffset()
+    {
+        return $this->pagination->getOffset();
     }
 }
  
