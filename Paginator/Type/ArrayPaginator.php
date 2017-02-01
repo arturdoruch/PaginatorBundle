@@ -33,7 +33,7 @@ class ArrayPaginator extends AbstractPaginator
     public function getIterator()
     {
         $limit = $this->getLimit() ?: $this->count();
-        $items = array_splice($this->array, $this->getOffset(), $limit);
+        $items = array_slice($this->array, $this->getOffset(), $limit);
 
         return new \ArrayIterator($items);
     }

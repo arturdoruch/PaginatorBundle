@@ -81,7 +81,7 @@ instance of Doctrine\MongoDB\CursorInterface, instance of MongoCursor, or array 
 
 Paginate items with Doctrine ORM query and query builder.
 ```php
-// Acme\ProjectBundle\Controller\ProjectController.php
+// AppBundle\Controller\ProjectController.php
 
 public function listAction($page, Request $request)
 {
@@ -101,7 +101,7 @@ public function listAction($page, Request $request)
 
     $projects = $paginator->paginate($query, $page, 5);    
 
-    return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
+    return $this->render('AppBundle:Project:list.html.twig', array(
         'projects' => $projects
     ));
 }
@@ -120,7 +120,7 @@ Paginate items with Doctrine\MongoDB\CursorInterface and MongoCursor.
 Paginate items from array. Array can contain array or object collection.
 
 ```php
-// Acme\ProjectBundle\Controller\ProjectController.php
+// AppBundle\Controller\ProjectController.php
 
 public function listAction($page, Request $request)
 {
@@ -151,7 +151,7 @@ public function listAction($page, Request $request)
     $paginator = $this->get('arturdoruch_paginator');
     $projects = $paginator->paginate($projectsList, $page, 5);
 
-    return $this->render('AcmeProjectBundle:Project:list.html.twig', array(
+    return $this->render('AppBundle:Project:list.html.twig', array(
         'projects' => $projects
     ));
 }
