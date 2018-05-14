@@ -202,20 +202,26 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
     }
 
     /**
+     * @todo Optimize getting route parameters.
+     *
      * @param int $page
      * @return string
      */
     private function generateUrl($page)
     {
         $params = $this->getRouteParams();
+        parse_str($params['queryString'], $query);
 
-        if (isset($params['params']['page'])) {
-            $params['params']['page'] = $page;
+        if (isset($params['parameters']['page'])) {
+            $params['parameters']['page'] = $page;
+        } else {
+            $query['page'] = $page;
         }
 
-        $url = $this->router->generate($params['route'], $params['params']);
-        if (!empty($params['queryString'])) {
-            $url .= '?' . $params['queryString'];
+        $url = $this->router->generate($params['route'], $params['parameters']);
+
+        if (!empty($query)) {
+            $url .= '?' . http_build_query($query);
         }
 
         return $url;
@@ -225,18 +231,18 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
     private function getRouteParams()
     {
         $context = $this->router->getContext();
-        $params = $this->router->match($context->getPathInfo());
-        $route = $params['_route'];
+        $parameters = $this->router->match($context->getPathInfo());
+        $route = $parameters['_route'];
 
-        foreach ($params as $key => $param) {
+        foreach ($parameters as $key => $param) {
             if (substr($key, 0, 1) == '_') {
-                unset($params[$key]);
+                unset($parameters[$key]);
             }
         }
 
         return array(
             'route' => $route,
-            'params' => $params,
+            'parameters' => $parameters,
             'queryString' => $context->getQueryString()
         );
     }
