@@ -15,6 +15,11 @@ abstract class AbstractPaginator implements PaginatorInterface
     private $pagination;
 
     /**
+     * @var \ArrayIterator
+     */
+    private $items;
+
+    /**
      * @param Pagination $pagination
      */
     public function setPagination(Pagination $pagination)
@@ -29,6 +34,23 @@ abstract class AbstractPaginator implements PaginatorInterface
     {
         return $this->pagination;
     }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        if (!$this->items) {
+            $this->items = $this->getItems();
+        }
+
+        return $this->items;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    abstract protected function getItems();
 
     /**
      * @return int
@@ -46,4 +68,3 @@ abstract class AbstractPaginator implements PaginatorInterface
         return $this->pagination->getOffset();
     }
 }
- 

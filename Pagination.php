@@ -11,14 +11,17 @@ class Pagination
      * @var int
      */
     private $totalItems;
+
     /**
      * @var int
      */
     private $page;
+
     /**
      * @var int
      */
     private $limit;
+
     /**
      * @var int
      */
@@ -40,21 +43,17 @@ class Pagination
     }
 
     /**
-     * Gets number of total items
-     *
      * @return int
      */
-    public function totalItems()
+    public function getTotalItems()
     {
         return $this->totalItems;
     }
 
     /**
-     * Gets number of total pages
-     *
      * @return int
      */
-    public function totalPages()
+    public function getTotalPages()
     {
         if ($this->limit < 1) {
             return 1;
@@ -63,6 +62,9 @@ class Pagination
         return (int)ceil($this->totalItems / $this->limit);
     }
 
+    /**
+     * @return int
+     */
     public function getPage()
     {
         return $this->page;
@@ -87,7 +89,7 @@ class Pagination
     /**
      * @return int
      */
-    public function previousPage()
+    public function getPreviousPage()
     {
         return $this->page - 1;
     }
@@ -95,7 +97,7 @@ class Pagination
     /**
      * @return int
      */
-    public function nextPage()
+    public function getNextPage()
     {
         return $this->page + 1;
     }
@@ -105,7 +107,7 @@ class Pagination
      */
     public function hasPreviousPage()
     {
-        return $this->previousPage() >= 1;
+        return $this->getPreviousPage() >= 1;
     }
 
     /**
@@ -113,7 +115,7 @@ class Pagination
      */
     public function hasNextPage()
     {
-        return $this->nextPage() <= $this->totalPages();
+        return $this->getNextPage() <= $this->getTotalPages();
     }
 }
  

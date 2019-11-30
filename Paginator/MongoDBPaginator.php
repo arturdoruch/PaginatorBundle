@@ -1,8 +1,6 @@
 <?php
 
-namespace ArturDoruch\PaginatorBundle\Paginator\Type;
-
-use ArturDoruch\PaginatorBundle\Paginator\AbstractPaginator;
+namespace ArturDoruch\PaginatorBundle\Paginator;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -30,7 +28,7 @@ class MongoDBPaginator extends AbstractPaginator
     /**
      * @return \ArrayIterator
      */
-    public function getIterator()
+    protected function getItems()
     {
         $this->cursor->skip($this->getOffset());
 

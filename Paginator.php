@@ -3,12 +3,11 @@
 namespace ArturDoruch\PaginatorBundle;
 
 use ArturDoruch\PaginatorBundle\Paginator\PaginatorInterface;
-use ArturDoruch\PaginatorBundle\Paginator\Type\ArrayPaginator;
-use ArturDoruch\PaginatorBundle\Paginator\Type\DoctrineMongoDBPaginator;
-use ArturDoruch\PaginatorBundle\Paginator\Type\DoctrinePaginator;
-use ArturDoruch\PaginatorBundle\Paginator\Type\MongoDBPaginator;
+use ArturDoruch\PaginatorBundle\Paginator\ArrayPaginator;
+use ArturDoruch\PaginatorBundle\Paginator\DoctrineMongoDBPaginator;
+use ArturDoruch\PaginatorBundle\Paginator\DoctrinePaginator;
+use ArturDoruch\PaginatorBundle\Paginator\MongoDBPaginator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -22,7 +21,7 @@ class Paginator
 
     public function __construct($limit)
     {
-        $this->limit = (int)$limit;
+        $this->limit = (int) $limit;
     }
 
     /**
@@ -40,8 +39,8 @@ class Paginator
      */
     public function paginate($query, $page, $limit, $fetchJoinCollection = true)
     {
-        $page = (int)$page;
-        $limit = (int)$limit;
+        $page = (int) $page;
+        $limit = (int) $limit;
 
         if ($limit === 0) {
             $limit = $this->limit;
@@ -51,7 +50,9 @@ class Paginator
             $page = 1;
         }
 
-        $offset = $this->countOffset($page, $limit);
+        if (0 > ($offset = ($page - 1) * $limit)) {
+            $offset = 0;
+        }
 
         $paginator = $this->getPaginator($query, $fetchJoinCollection);
         $totalItems = $paginator->count();
@@ -93,24 +94,11 @@ class Paginator
                 return new MongoDBPaginator($query);
         }
 
-        throw new InvalidParameterException(sprintf(
-                'The $query argument must be one of types: array, Doctrine\ORM\Query, Doctrine\ORM\QueryBuilder, '.
-                'Doctrine\ODM\MongoDB\Query\Builder, Doctrine\ODM\MongoDB\Query\Query, Doctrine\MongoDB\CursorInterface, '.
-                'MongoCursor, but given type of "%s".',
-                is_object($query) ? get_class($query) : gettype($query)
-            ));
-    }
-
-    /**
-     * @param int $page
-     * @param int $limit
-     *
-     * @return int
-     */
-    private function countOffset($page, $limit)
-    {
-        $offset = ($page - 1) * $limit;
-
-        return ($offset < 0) ? 0 : $offset;
+        throw new \InvalidArgumentException(sprintf(
+            'The $query argument must be one of types: array, Doctrine\ORM\Query, Doctrine\ORM\QueryBuilder, '.
+            'Doctrine\ODM\MongoDB\Query\Builder, Doctrine\ODM\MongoDB\Query\Query, Doctrine\MongoDB\CursorInterface, '.
+            'MongoCursor, but got type of "%s".',
+            is_object($query) ? get_class($query) : gettype($query)
+        ));
     }
 }

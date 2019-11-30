@@ -1,11 +1,10 @@
 <?php
 
-namespace ArturDoruch\PaginatorBundle\Paginator\Type;
+namespace ArturDoruch\PaginatorBundle\Paginator;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use ArturDoruch\PaginatorBundle\Paginator\AbstractPaginator;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -16,6 +15,11 @@ class DoctrinePaginator extends AbstractPaginator
      * @var Paginator
      */
     private $paginator;
+
+    /**
+     * @var \ArrayIterator
+     */
+    private $iterator;
 
     /**
      * @param Query|QueryBuilder $query A Doctrine ORM query or query builder.
@@ -37,16 +41,20 @@ class DoctrinePaginator extends AbstractPaginator
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    protected function getItems()
     {
-        $query = $this->getQuery();
-        $query->setFirstResult($this->getOffset());
+        if (!$this->iterator) {
+            $query = $this->getQuery();
+            $query->setFirstResult($this->getOffset());
 
-        if ($limit = $this->getLimit()) {
-            $query->setMaxResults($limit);
+            if ($limit = $this->getLimit()) {
+                $query->setMaxResults($limit);
+            }
+
+            $this->iterator = $this->paginator->getIterator();
         }
 
-        return $this->paginator->getIterator();
+        return $this->iterator;
     }
 
     /**
@@ -77,12 +85,10 @@ class DoctrinePaginator extends AbstractPaginator
      * Sets whether the paginator will use an output walker.
      *
      * @param bool|null $useOutputWalkers
-     *
-     * @return $this
      */
     public function setUseOutputWalkers($useOutputWalkers)
     {
-        return $this->paginator->setUseOutputWalkers($useOutputWalkers);
+        $this->paginator->setUseOutputWalkers($useOutputWalkers);
     }
 }
  

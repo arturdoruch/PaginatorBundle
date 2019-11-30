@@ -10,8 +10,6 @@ use ArturDoruch\PaginatorBundle\Pagination;
 interface PaginatorInterface extends \Countable, \IteratorAggregate
 {
     /**
-     * Sets pagination
-     *
      * @param Pagination $pagination
      */
     public function setPagination(Pagination $pagination);

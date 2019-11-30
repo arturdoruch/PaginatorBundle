@@ -70,7 +70,7 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
     public function renderTotalItems(Pagination $pagination)
     {
         return $this->environment->render('ArturDoruchPaginatorBundle:Pagination:totalItems.html.twig', array(
-                'totalItems' => $pagination->totalItems()
+                'totalItems' => $pagination->getTotalItems()
             ));
     }
 
@@ -85,15 +85,15 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
         $data = array();
 
         $rangeSkipPage = 3;
-        $totalPages = $pagination->totalPages();
+        $totalPages = $pagination->getTotalPages();
 
-        if ($totalPages <= 1 || $pagination->getPage() > $pagination->totalPages()) {
+        if ($totalPages <= 1 || $pagination->getPage() > $pagination->getTotalPages()) {
             return null;
         }
 
         // Prev page
         if ($pagination->hasPreviousPage()) {
-            $data[] = $this->getHyperlinkData($this->config['prev_page_label'], $pagination->previousPage());
+            $data[] = $this->getHyperlinkData($this->config['prev_page_label'], $pagination->getPreviousPage());
         }
 
         for ($i = 1; $i <= $totalPages; $i++) {
@@ -138,7 +138,7 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
         }
         // Next page
         if ($pagination->hasNextPage()) {
-            $data[] = $this->getHyperlinkData($this->config['next_page_label'], $pagination->nextPage());
+            $data[] = $this->getHyperlinkData($this->config['next_page_label'], $pagination->getNextPage());
         }
 
         return $this->environment->render('ArturDoruchPaginatorBundle:Pagination:pagination.html.twig', array(
@@ -154,14 +154,14 @@ class PaginationExtension extends \Twig_Extension implements Twig_Extension_Init
      */
     public function renderDisplayedItems(Pagination $pagination)
     {
-        if ($pagination->totalItems() == 0) {
+        if ($pagination->getTotalItems() == 0) {
             return null;
         }
 
         $from = $pagination->getOffset() + 1;
         $to = $pagination->getPage() * $pagination->getLimit();
-        if ($to >= $pagination->totalItems() || $to <= 0) {
-            $to = $pagination->totalItems();
+        if ($to >= $pagination->getTotalItems() || $to <= 0) {
+            $to = $pagination->getTotalItems();
         }
 
         if ($from > $to) {

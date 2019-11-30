@@ -1,8 +1,7 @@
 <?php
 
-namespace ArturDoruch\PaginatorBundle\Paginator\Type;
+namespace ArturDoruch\PaginatorBundle\Paginator;
 
-use ArturDoruch\PaginatorBundle\Paginator\AbstractPaginator;
 use Doctrine\MongoDB\CursorInterface;
 use Doctrine\ODM\MongoDB\Query\Builder;
 use Doctrine\ODM\MongoDB\Query\Query;
@@ -55,7 +54,7 @@ class DoctrineMongoDBPaginator extends AbstractPaginator
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    protected function getItems()
     {
         $cursor = $this->getCursor();
         $cursor->skip($this->getOffset());
